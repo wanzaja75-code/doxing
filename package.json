@@ -1,9 +1,8 @@
 {
   "name": "hacker-loading",
   "version": "1.0.0",
-  "description": "Web dengan loading profesional dan hacker screen",
+  "description": "Web dengan loading dan hacker screen",
   "scripts": {
-    "build": "node build.js"
-  },
-  "dependencies": {}
+    "build": "echo 'Build done'"
+  }
 }
