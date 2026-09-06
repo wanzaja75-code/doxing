@@ -1,8 +1,0 @@
-{
-  "name": "hacker-loading",
-  "version": "1.0.0",
-  "description": "Web dengan loading dan hacker screen",
-  "scripts": {
-    "build": "echo 'Build done'"
-  }
-}
